@@ -258,7 +258,9 @@ def main():
 
         pull = (Eb - Eb_predicted) / DEb
         histoPull.Fill(pull)
-
+    
+    gStyle.SetOptStat(1101)
+    
     c = TCanvas("c", "")
     histoEb.Fit("gaus")
     histoEb.Draw()
