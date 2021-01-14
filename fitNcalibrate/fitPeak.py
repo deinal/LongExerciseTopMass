@@ -31,14 +31,14 @@ def gPeak(h=None,inDir=None,isData=None,lumi=None):
     ## Set the function
     fitfunc = TF1("Gaussian fit", myFitFunc, minToFit, maxToFit, 3)
     ## Set normalization
-    fitfunc.SetParameter(0, h.Integral());
-    fitfunc.SetParLimits(0, 0.1*h.Integral(), 2.5*h.Integral());
+    fitfunc.SetParameter(0, h.Integral())
+    fitfunc.SetParLimits(0, 0.1*h.Integral(), 2.5*h.Integral())
     ## Set gaussian mean starting value and limits
-    fitfunc.SetParameter(1, 4.2);
-    fitfunc.SetParLimits(1, 4., 4.4);
+    fitfunc.SetParameter(1, 4.2)
+    fitfunc.SetParLimits(1, 4., 4.4)
     ## Set gaussian width starting value and limits
-    fitfunc.SetParameter(2, 0.65);
-    fitfunc.SetParLimits(2, 0.35, 0.95);
+    fitfunc.SetParameter(2, 0.65)
+    fitfunc.SetParLimits(2, 0.35, 0.95)
     ## Some cosmetics
     fitfunc.SetLineColor(kBlue)
     fitfunc.SetLineWidth(3)
@@ -60,6 +60,8 @@ def gPeak(h=None,inDir=None,isData=None,lumi=None):
     # Calculate the uncalibrated Energy peak position and its uncertainty
     Ereco = math.exp(mean)
     Err = abs(Ereco*meanErr)
+
+    return Ereco, Err
 
     # Make a pull distribution    
     hPull = h.Clone("Pull")
@@ -154,71 +156,106 @@ def gPeak(h=None,inDir=None,isData=None,lumi=None):
     hPull.GetXaxis().SetRangeUser(minToFit,maxToFit)
     hPull.Draw("e")
 
-    #save and delete
-    sName = inDir+"/fit_";
+    # save and delete
+    sName = inDir + "/fit_"
     if isData is True:
-        sName = sName+"Data";
+        sName = sName + "Data"
     else: 
-        sName = sName+"MC";
-    c.SaveAs(sName+".pdf");
-    c.SaveAs(sName+".png");
+        sName = sName + "MC"
+    c.SaveAs(sName + ".pdf")
+    c.SaveAs(sName + ".png")
     del c
     fitfunc.IsA().Destructor(fitfunc)
-    del caption1,caption2
+    del caption1, caption2
 
     #all done here ;)
     return Ereco,Err
 
 def main():
 
-           usage = 'usage: %prog [options]'
-           parser = optparse.OptionParser(usage)
-           parser.add_option('-d', '--isData',  action = 'store_true',   dest='isData')
-           parser.add_option('-i', '--inDir',   dest='inDir',   help='input directory',          default='nominal',    type='string')
-           parser.add_option('-j', '--json',    dest='json',    help='json with list of files',  default="../analyzeNplot/data/samples_Run2015_25ns.json", type='string')
-           parser.add_option('-l', '--lumi',    dest='lumi' ,   help='lumi to print out',        default=2444.,        type=float)
-           (opt, args) = parser.parse_args()
-           
-           # Read list of MC samples
-           if opt.isData is not True:
-               samplesList=[]
-               jsonFile = open(opt.json,'r')
-               jsonList=json.load(jsonFile,encoding='utf-8').items()
-               jsonFile.close()
-               for tag,sample in jsonList: 
-                   if not sample[3] in samplesList and not "Data" in sample[3]:
-                       samplesList.append(sample[3])
+    usage = 'usage: %prog [options]'
+    parser = optparse.OptionParser(usage)
+    parser.add_option('-d', '--isData',  action = 'store_true',   dest='isData')
+    parser.add_option('-i', '--inDir',   dest='inDir',   help='input directory',          default='nominal',    type='string')
+    parser.add_option('-j', '--json',    dest='json',    help='json with list of files',  default="../analyzeNplot/data/samples_Run2015_25ns.json", type='string')
+    parser.add_option('-l', '--lumi',    dest='lumi' ,   help='lumi to print out',        default=2444.,        type=float)
+    (opt, args) = parser.parse_args()
+    
+    # Read list of MC samples
+    if opt.isData is not True:
+        samplesList=[]
+        jsonFile = open(opt.json,'r')
+        jsonList=json.load(jsonFile,encoding='utf-8').items()
+        jsonFile.close()
+        for tag,sample in jsonList: 
+            if not sample[3] in samplesList and not "Data" in sample[3]:
+                samplesList.append(sample[3])
 
-           # Open the root file
-           fiName = "../analyzeNplot/"+opt.inDir+"/plots/plotter.root"
-           print "... processing", fiName
-           if not os.path.isfile(fiName):
-               print "Help, file doesn't exist"
-               exit(-1)
-           res = ROOT.TFile(fiName, "read")
+    # Open the root file
+    fiName = "../analyzeNplot/"+opt.inDir+"/plots/plotter.root"
+    print "... processing", fiName
+    if not os.path.isfile(fiName):
+        print "Help, file doesn't exist"
+        exit(-1)
+    res = ROOT.TFile(fiName, "read")
 
-           #Get the histogram 
-           hName = "bjetenls/"   
-           if opt.isData is True:
-               hName = hName + "bjetenls"
-           else:
-               hName = hName + "bjetenls_" + samplesList[0]
-           histo = res.Get(str(hName))
-           histo.SetDirectory(0)
-           if opt.isData is not True:
-               for sampleInfo in samplesList:
-                   if sampleInfo is not samplesList[0]: 
-                       histo.Add(res.Get(str("bjetenls/bjetenls_"+sampleInfo)).Clone());
+    # Get the histogram 
+    hName = "bjetenls/"   
+    if opt.isData is True:
+        hName = hName + "bjetenls"
+    else:
+        hName = hName + "bjetenls_" + samplesList[0]
+    histo = res.Get(str(hName))
+    histo.SetDirectory(0)
+    if opt.isData is not True:
+        for sampleInfo in samplesList:
+            if sampleInfo is not samplesList[0]: 
+                histo.Add(res.Get(str("bjetenls/bjetenls_"+sampleInfo)).Clone())
 
-           # Create the output directory
-           if not os.path.isdir(opt.inDir):
-               os.mkdir(opt.inDir)
+    # Pseudo experiment implementation
+    random3 = TRandom3()
+    random3.SetSeed(1)
 
-           # Calculate the energy peak position in the big MC sample
-           Eb,DEb = gPeak(h=histo,inDir=opt.inDir,isData=opt.isData,lumi=opt.lumi)
-           print "<E_{b}> = (%3.2f #pm %3.2f) GeV" % (Eb,DEb)
+    histoEb = TH1F("histoEb", "pretty title", 100, 63, 71)
+    histoDEb = TH1F("histoDEb", "nice title", 100, 0, 0.5)
 
-           res.Close()
+    n = 1000
+
+    for i in range(n):
+        histogram = histo.Clone()
+        for ibin in range(histo.GetNbinsX()):
+
+            x = histo.GetXaxis().GetBinCenter(ibin)
+            y = histo.GetBinContent(ibin)
+            
+            fluctuation = random3.PoissonD(y*math.exp(x)) / math.exp(x)
+            histogram.SetBinContent(ibin, fluctuation)
+            error = math.sqrt(fluctuation) / math.exp(x)
+            histogram.SetBinError(ibin, error)
+
+        # Calculate the energy peak position in the big MC sample
+        Eb, DEb = gPeak(h=histogram, inDir=opt.inDir, isData=opt.isData, lumi=opt.lumi)
+        print "<E_b> = (%3.2f #pm %3.2f) GeV" % (Eb, DEb)
+
+        histoEb.Fill(Eb)
+        histoDEb.Fill(DEb)
+
+    c = TCanvas("c", "")
+    histoEb.Fit("gaus")
+    histoEb.Draw()
+    c.SaveAs(opt.inDir + "/histoEb.pdf")
+
+    histoDEb.Fit("gaus")
+    histoDEb.Draw()
+    c.SaveAs(opt.inDir + "/histoDEb.pdf") 
+    
+    c.Close() 
+
+    # Create the output directory
+    if not os.path.isdir(opt.inDir):
+        os.mkdir(opt.inDir)
+
+    res.Close()
                
 if __name__ == "__main__":
     sys.exit(main())
