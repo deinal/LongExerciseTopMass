@@ -137,23 +137,6 @@ def runBJetEnergyPeak(inFileURL, outFileURL, xsec=None):
             for i in range(0,len(evWgt)):
                 evWgt[i] *= tree.GenWeights[0]
 
-        nLeptons = 0
-        leptonsP4=[]
-
-        for ij in xrange(0,tree.nLepton):
-
-            #get the kinematics and select the lepton                                                                
-            lp4=ROOT.TLorentzVector()
-            lp4.SetPtEtaPhiM(tree.Lepton_pt[ij],tree.Lepton_eta[ij],tree.Lepton_phi[ij],0)
-            if lp4.Pt()<20 or ROOT.TMath.Abs(lp4.Eta())>2.4 : continue
-
-            #count selected jet                                                                                   
-            nLeptons +=1
-
-            leptonsP4.append(lp4)
-
-        if nLeptons<2 : continue
-
 
         #Fill histograms for JEC variations
         for updown in ['up', 'down', 'nominal']:
@@ -183,7 +166,7 @@ def runBJetEnergyPeak(inFileURL, outFileURL, xsec=None):
                         w_jec = 1.-tree.Jet_uncs[ij*27+iJEC]
                     else:
                         w_jec = 1.
-                        print('norm')
+                        #print(updown)
                     jp4 = jp4*w_jec
                     if jp4.Pt()<30 or ROOT.TMath.Abs(jp4.Eta())>2.4 : continue
 
@@ -202,51 +185,50 @@ def runBJetEnergyPeak(inFileURL, outFileURL, xsec=None):
                 # nJet and nBJet cut
                 if nJets<2 : continue
                 if nBtags!=1 and nBtags!=2 : continue
-
+                
+                nLeptons = 0
                 lp_indices=[]
                 
                 for ij in xrange(0,tree.nLepton):
-                        #get the kinematics and select the lepton                       
-                        lp4=ROOT.TLorentzVector()
-                        lp4.SetPtEtaPhiM(tree.Lepton_pt[ij],tree.Lepton_eta[ij],tree.Lepton_phi[ij],0)
-                        if lp4.Pt()<20 or ROOT.TMath.Abs(lp4.Eta())>2.4 : continue
+                    #get the kinematics and select the lepton                       
+                    lp4=ROOT.TLorentzVector()
+                    lp4.SetPtEtaPhiM(tree.Lepton_pt[ij],tree.Lepton_eta[ij],tree.Lepton_phi[ij],0)
+                    if lp4.Pt()<20 or ROOT.TMath.Abs(lp4.Eta())>2.4 : continue
 
-                        #count selected leptons                    
-                        nLeptons +=1
+                    #count selected leptons                    
+                    nLeptons +=1
                     lp_indices.append(ij)
-                    #print("I have ",nLeptons,"leptons")
+                #print("I have ",nLeptons,"leptons")
 
-                    if nLeptons<2 : continue
-                    if nLeptons==2: 
-                        lpindex1=lp_indices[0]
-                        lpindex2=lp_indices[1]
-                    else:
-                        print("I have {} leptons".format(nLeptons))
-                        continue
-                    if not ( (abs(tree.Lepton_id[lpindex1])==11 and abs(tree.Lepton_id[lpindex2])==13) or 
+                if nLeptons<2 : continue
+                if nLeptons==2: 
+                    lpindex1=lp_indices[0]
+                    lpindex2=lp_indices[1]
+                else:
+                    #print("I have {} leptons".format(nLeptons))
+                    continue
+                if not ( (abs(tree.Lepton_id[lpindex1])==11 and abs(tree.Lepton_id[lpindex2])==13) or 
                     (abs(tree.Lepton_id[lpindex1])==13 and abs(tree.Lepton_id[lpindex2])==11)): 
-                        print(tree.Lepton_id[lpindex1],tree.Lepton_id[lpindex2])
-                        continue 
+                    print(tree.Lepton_id[lpindex1],tree.Lepton_id[lpindex2])
+                    continue 
                     
-                    
-                    if tree.Lepton_ch[lpindex1] * tree.Lepton_ch[lpindex2] >0 : 
-                        print("Charge product positive",tree.Lepton_ch[lpindex1],tree.Lepton_ch[lpindex2])
-                        continue
+                if tree.Lepton_ch[lpindex1] * tree.Lepton_ch[lpindex2] >0 : 
+                    print("Charge product positive",tree.Lepton_ch[lpindex1],tree.Lepton_ch[lpindex2])
+                    continue
 
-                    l1p4=ROOT.TLorentzVector()
-                    l1p4.SetPtEtaPhiM(tree.Lepton_pt[lpindex1],tree.Lepton_eta[lpindex1],tree.Lepton_phi[lpindex1],0)
-                    l2p4=ROOT.TLorentzVector()
-                    l2p4.SetPtEtaPhiM(tree.Lepton_pt[lpindex2],tree.Lepton_eta[lpindex2],tree.Lepton_phi[lpindex2],0)
+                l1p4=ROOT.TLorentzVector()
+                l1p4.SetPtEtaPhiM(tree.Lepton_pt[lpindex1],tree.Lepton_eta[lpindex1],tree.Lepton_phi[lpindex1],0)
+                l2p4=ROOT.TLorentzVector()
+                l2p4.SetPtEtaPhiM(tree.Lepton_pt[lpindex2],tree.Lepton_eta[lpindex2],tree.Lepton_phi[lpindex2],0)
 
                 #print('I have 2 leptons again')
 
-                    emup4 = l1p4+l2p4
-                    M_emu= emup4.M()
-                    if M_emu < 12 :  
+                emup4 = l1p4+l2p4
+                M_emu= emup4.M()
+                if M_emu < 12 :  
                     print("Mass is {}, skipping.....".format(M_emu))
                     continue
                 #print("Mass is in the right mass range")
-                
                 ## fill JEC histograms
                 if updown != 'nominal':
                     for ij in xrange(0,len(taggedJetsP4)):
