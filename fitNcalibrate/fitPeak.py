@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-import math, ROOT, json, optparse, os, sys, pprint
-from ROOT import *
+import math, json, optparse, os, sys, pprint
+from ROOT import TMath, kFALSE, gStyle, kBlack, TF1, TH1F, TRandom3, TCanvas, TFile, kBlue
 
 def myFitFunc(x=None,par=None):
-    return par[0]*TMath.Gaus(x[0],par[1],par[2],kFALSE)
+    return par[0]*TMath.Gaus(x[0], par[1], par[2], kFALSE)
 
-def gPeak(h=None,inDir=None,isData=None,lumi=None):
+def gPeak(h=None, inDir=None, isData=None, lumi=None):
 
     # Set the stats off 
     gStyle.SetOptStat(0)
@@ -183,7 +183,7 @@ def main():
     
     # Read list of MC samples
     if opt.isData is not True:
-        samplesList=[]
+        samplesList = []
         jsonFile = open(opt.json,'r')
         jsonList=json.load(jsonFile,encoding='utf-8').items()
         jsonFile.close()
@@ -193,11 +193,11 @@ def main():
 
     # Open the root file
     fiName = "../analyzeNplot/"+opt.inDir+"/plots/plotter.root"
-    print "... processing", fiName
+    print("... processing", fiName)
     if not os.path.isfile(fiName):
-        print "Help, file doesn't exist"
+        print("Help, file doesn't exist")
         exit(-1)
-    res = ROOT.TFile(fiName, "read")
+    res = TFile(fiName, "read")
 
     # Get the histogram 
     hName = "bjetenls/"   
@@ -212,16 +212,32 @@ def main():
             if sampleInfo is not samplesList[0]: 
                 histo.Add(res.Get(str("bjetenls/bjetenls_"+sampleInfo)).Clone())
 
+    # Create the output directory
+    if not os.path.isdir(opt.inDir):
+        os.mkdir(opt.inDir)
+
     # Pseudo experiment implementation
     random3 = TRandom3()
     random3.SetSeed(1)
 
-    histoEb = TH1F("histoEb", "pretty title", 100, 63, 71)
-    histoDEb = TH1F("histoDEb", "nice title", 100, 0, 0.5)
+    if opt.inDir == 'nominal':
+        histoEb = TH1F("histoEb", "nice", 100, 63, 71)
+        histoDEb = TH1F("histoDEb", "indeed", 100, 0, 0.5)
+        Eb_predicted = 67.57
+    if opt.inDir == 'light':
+        histoEb = TH1F("histoEb", "nice", 100, 50, 100)
+        histoDEb = TH1F("histoDEb", "indeed", 100, 0, 0.5)
+        Eb_predicted = 65.74
+    if opt.inDir == 'heavy':
+        histoEb = TH1F("histoEb", "nice", 100, 50, 100)
+        histoDEb = TH1F("histoDEb", "indeed", 100, 0, 0.5)
+        Eb_predicted = 69.39
+
+    histoPull = TH1F("histoPull", "very nice", 100, -100, 100)
 
     n = 1000
 
-    for i in range(n):
+    for _ in range(n):
         histogram = histo.Clone()
         for ibin in range(histo.GetNbinsX()):
 
@@ -235,10 +251,13 @@ def main():
 
         # Calculate the energy peak position in the big MC sample
         Eb, DEb = gPeak(h=histogram, inDir=opt.inDir, isData=opt.isData, lumi=opt.lumi)
-        print "<E_b> = (%3.2f #pm %3.2f) GeV" % (Eb, DEb)
+        print("<E_b> = (%3.2f #pm %3.2f) GeV" % (Eb, DEb))
 
         histoEb.Fill(Eb)
         histoDEb.Fill(DEb)
+
+        pull = (Eb - Eb_predicted) / DEb
+        histoPull.Fill(pull)
 
     c = TCanvas("c", "")
     histoEb.Fit("gaus")
@@ -249,11 +268,11 @@ def main():
     histoDEb.Draw()
     c.SaveAs(opt.inDir + "/histoDEb.pdf") 
     
-    c.Close() 
+    histoPull.Fit("gaus")
+    histoPull.Draw()
+    c.SaveAs(opt.inDir + "/histoPull.pdf") 
 
-    # Create the output directory
-    if not os.path.isdir(opt.inDir):
-        os.mkdir(opt.inDir)
+    c.Close() 
 
     res.Close()
                
