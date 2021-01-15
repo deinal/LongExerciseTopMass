@@ -25,17 +25,70 @@ def runBJetEnergyPeak(inFileURL, outFileURL, xsec=None):
         'bjetenls_jer_down':ROOT.TH1F('bjetenls_jer_down',';log(E);  1/E dN_{b jets}/dlog(E)',20,3.,7.),
 
         # JEC: uncorrelated group
-
+        'bjetenls_jec_1_up':ROOT.TH1F('bjetenls_jec_1_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_1_down':ROOT.TH1F('bjetenls_jec_1_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_2_up':ROOT.TH1F('bjetenls_jec_2_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_2_down':ROOT.TH1F('bjetenls_jec_2_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_4_up':ROOT.TH1F('bjetenls_jec_4_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_4_down':ROOT.TH1F('bjetenls_jec_4_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_5_up':ROOT.TH1F('bjetenls_jec_5_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_5_down':ROOT.TH1F('bjetenls_jec_5_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_6_up':ROOT.TH1F('bjetenls_jec_6_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_6_down':ROOT.TH1F('bjetenls_jec_6_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_7_up':ROOT.TH1F('bjetenls_jec_7_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_7_down':ROOT.TH1F('bjetenls_jec_7_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_8_up':ROOT.TH1F('bjetenls_jec_8_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_8_down':ROOT.TH1F('bjetenls_jec_8_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_9_up':ROOT.TH1F('bjetenls_jec_9_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_9_down':ROOT.TH1F('bjetenls_jec_9_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_10_up':ROOT.TH1F('bjetenls_jec_10_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_10_down':ROOT.TH1F('bjetenls_jec_10_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_11_up':ROOT.TH1F('bjetenls_jec_11_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_11_down':ROOT.TH1F('bjetenls_jec_11_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_12_up':ROOT.TH1F('bjetenls_jec_12_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_12_down':ROOT.TH1F('bjetenls_jec_12_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_13_up':ROOT.TH1F('bjetenls_jec_13_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_13_down':ROOT.TH1F('bjetenls_jec_13_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_14_up':ROOT.TH1F('bjetenls_jec_14_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_14_down':ROOT.TH1F('bjetenls_jec_14_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_15_up':ROOT.TH1F('bjetenls_jec_15_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_15_down':ROOT.TH1F('bjetenls_jec_15_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_17_up':ROOT.TH1F('bjetenls_jec_17_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_17_down':ROOT.TH1F('bjetenls_jec_17_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_18_up':ROOT.TH1F('bjetenls_jec_18_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_18_down':ROOT.TH1F('bjetenls_jec_18_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_19_up':ROOT.TH1F('bjetenls_jec_19_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_19_down':ROOT.TH1F('bjetenls_jec_19_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
         # JEC: in-situ correlation group
-
+        'bjetenls_jec_3_up':ROOT.TH1F('bjetenls_jec_3_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_3_down':ROOT.TH1F('bjetenls_jec_3_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
         # JEC: inter-calibration
-
+        'bjetenls_jec_16_up':ROOT.TH1F('bjetenls_jec_16_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_16_down':ROOT.TH1F('bjetenls_jec_16_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
         # JEC: pile-up
-
+        'bjetenls_jec_20_up':ROOT.TH1F('bjetenls_jec_20_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_20_down':ROOT.TH1F('bjetenls_jec_20_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_21_up':ROOT.TH1F('bjetenls_jec_21_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_21_down':ROOT.TH1F('bjetenls_jec_21_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_22_up':ROOT.TH1F('bjetenls_jec_22_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_22_down':ROOT.TH1F('bjetenls_jec_22_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_23_up':ROOT.TH1F('bjetenls_jec_23_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_23_down':ROOT.TH1F('bjetenls_jec_23_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_24_up':ROOT.TH1F('bjetenls_jec_24_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_24_down':ROOT.TH1F('bjetenls_jec_24_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_25_up':ROOT.TH1F('bjetenls_jec_25_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_25_down':ROOT.TH1F('bjetenls_jec_25_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
         # JEC: flavour
-        
+        'bjetenls_jec_26_up':ROOT.TH1F('bjetenls_jec_26_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_jec_26_down':ROOT.TH1F('bjetenls_jec_26_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
         # Other Systematics
-
+        'bjetenls_lep_up':ROOT.TH1F('bjetenls_lep_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_lep_down':ROOT.TH1F('bjetenls_lep_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_PU_up':ROOT.TH1F('bjetenls_PU_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_PU_down':ROOT.TH1F('bjetenls_PU_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_toppT':ROOT.TH1F('bjetenls_toppT',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_norm_up':ROOT.TH1F('bjetenls_norm_up',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
+        'bjetenls_norm_down':ROOT.TH1F('bjetenls_norm_down',';log(E); 1/E dN_{b jets}/dlog(E)',20,3.,7.),
         }
 
     for key in histos:
@@ -68,95 +121,139 @@ def runBJetEnergyPeak(inFileURL, outFileURL, xsec=None):
         xsecWgt_down = 1
 
         # 25% uncertainty on ttgamma xsec
-        # if 'SingleT' in inFileURL:
-            # xsecWgt_up = ???
-            # xsecWgt_down = ???
+        if 'SingleT' in inFileURL:
+             xsecWgt_up = 1.25
+             xsecWgt_down = 0.75
         # 100% uncertainty on WJets xsec
-        # if 'WJets' in inFileURL:
-            # xsecWgt_up = ???
-            # xsecWgt_down = ???
+        if 'WJets' in inFileURL:
+             xsecWgt_up = 2
+             xsecWgt_down = 0
         # 50% uncertainty on other processes 
-        # if 'DY' in inFileURL or 'WZ' in inFileURL or 'ZZ' in inFileURL or 'WZ' in inFileURL:
-            # xsecWgt_up = ???
-            # xsecWgt_down = ???
+        if 'DY' in inFileURL or 'WZ' in inFileURL or 'ZZ' in inFileURL or 'WZ' in inFileURL:
+             xsecWgt_up = 1.5
+             xsecWgt_down = 0.5
 
         if tree.nGenWeight>0 :
             for i in range(0,len(evWgt)):
                 evWgt[i] *= tree.GenWeights[0]
 
-        nLeptons = 0
-        leptonsP4=[]
-
-        for ij in xrange(0,tree.nLepton):
-
-            #get the kinematics and select the lepton                                                                
-            lp4=ROOT.TLorentzVector()
-            lp4.SetPtEtaPhiM(tree.Lepton_pt[ij],tree.Lepton_eta[ij],tree.Lepton_phi[ij],0)
-            if lp4.Pt()<20 or ROOT.TMath.Abs(lp4.Eta())>2.4 : continue
-
-            #count selected jet                                                                                   
-            nLeptons +=1
-
-            leptonsP4.append(lp4)
-
-        if nLeptons<2 : continue
-
 
         #Fill histograms for JEC variations
-        for iJEC in range (0,27):
+        for updown in ['up', 'down', 'nominal']:
+            if updown == 'nominal':
+                nJEC = 1
+            else:
+                nJEC = 27
+            for iJEC in range (0,nJEC):
+                #require at least two jets
+                nJets, nBtags = 0, 0
+                taggedJetsP4=[]
+                #taggedJetsP4_up=[]
+                #taggedJetsP4_down=[]
+                matchedJetsP4=[]
+            
+                for ij in xrange(0,tree.nJet):
 
-            #require at least two jets
-            nJets, nBtags = 0, 0
-            taggedJetsP4=[]
-            taggedJetsP4_up=[]
-            taggedJetsP4_down=[]
-            matchedJetsP4=[]
-        
-            for ij in xrange(0,tree.nJet):
-
-                #get the kinematics and select the jet
-                jp4=ROOT.TLorentzVector()
-                jp4.SetPtEtaPhiM(tree.Jet_pt[ij],tree.Jet_eta[ij],tree.Jet_phi[ij],tree.Jet_mass[ij])
+                    #get the kinematics and select the jet
+                    jp4=ROOT.TLorentzVector()
+                    jp4.SetPtEtaPhiM(tree.Jet_pt[ij],tree.Jet_eta[ij],tree.Jet_phi[ij],tree.Jet_mass[ij])
 
 
-                ### access JEC variations from tree.Jet_unc branch
-                w_jec_up= 1.
-                w_jec_down= 1.
+                    ### access JEC variations from tree.Jet_unc branch
+                    if updown == 'up':
+                        w_jec = 1.+tree.Jet_uncs[ij*27+iJEC]
+                    elif updown == 'down':
+                        w_jec = 1.-tree.Jet_uncs[ij*27+iJEC]
+                    else:
+                        w_jec = 1.
+                        #print(updown)
+                    jp4 = jp4*w_jec
+                    if jp4.Pt()<30 or ROOT.TMath.Abs(jp4.Eta())>2.4 : continue
 
-                if jp4.Pt()<30 or ROOT.TMath.Abs(jp4.Eta())>2.4 : continue
+                    #count selected jet
+                    nJets +=1
 
-                #count selected jet
-                nJets +=1
-
-                #save P4 for b-tagged jet
-                if tree.Jet_CombIVF[ij]>0.8484: # medium cut
-                    nBtags+=1
-                    taggedJetsP4.append(jp4)
-                    taggedJetsP4_up.append(jp4*w_jec_up)
-                    taggedJetsP4_down.append(jp4*w_jec_down)
-                    if abs(tree.Jet_flavour[ij]) == 5:
-                        matchedJetsP4.append(jp4)
-        
-            # nJet and nBJet cut
-            if nJets<2 : continue
-            if nBtags!=1 and nBtags!=2 : continue
-
-            ## fill JEC histograms
-            for ij in xrange(0,len(taggedJetsP4)):
-                if ij>1 : break
-                # if iJEC > 0 :
-                    #fill JEC histograms
-                # else :
-                    #fill JER histogram
-
+                    #save P4 for b-tagged jet
+                    if tree.Jet_CombIVF[ij]>0.8484: # medium cut
+                        nBtags+=1
+                        taggedJetsP4.append(jp4)
+                        if abs(tree.Jet_flavour[ij]) == 5:
+                            matchedJetsP4.append(jp4)
+            
+            
+            
+                # nJet and nBJet cut
+                if nJets<2 : continue
+                if nBtags!=1 and nBtags!=2 : continue
                 
-        #save P4 for b-tagged jet
-        #use up to two leading b-tagged jets
-        for ij in xrange(0,len(taggedJetsP4)):
-            if ij>1 : break
-            #fill other histograms (nominal and weight based)
+                nLeptons = 0
+                lp_indices=[]
+                
+                for ij in xrange(0,tree.nLepton):
+                    #get the kinematics and select the lepton                       
+                    lp4=ROOT.TLorentzVector()
+                    lp4.SetPtEtaPhiM(tree.Lepton_pt[ij],tree.Lepton_eta[ij],tree.Lepton_phi[ij],0)
+                    if lp4.Pt()<20 or ROOT.TMath.Abs(lp4.Eta())>2.4 : continue
 
-            #histos['bjetenls_nominal'].Fill(....)
+                    #count selected leptons                    
+                    nLeptons +=1
+                    lp_indices.append(ij)
+                #print("I have ",nLeptons,"leptons")
+
+                if nLeptons<2 : continue
+                if nLeptons==2: 
+                    lpindex1=lp_indices[0]
+                    lpindex2=lp_indices[1]
+                else:
+                    #print("I have {} leptons".format(nLeptons))
+                    continue
+                if not ( (abs(tree.Lepton_id[lpindex1])==11 and abs(tree.Lepton_id[lpindex2])==13) or 
+                    (abs(tree.Lepton_id[lpindex1])==13 and abs(tree.Lepton_id[lpindex2])==11)): 
+                    print(tree.Lepton_id[lpindex1],tree.Lepton_id[lpindex2])
+                    continue 
+                    
+                if tree.Lepton_ch[lpindex1] * tree.Lepton_ch[lpindex2] >0 : 
+                    print("Charge product positive",tree.Lepton_ch[lpindex1],tree.Lepton_ch[lpindex2])
+                    continue
+
+                l1p4=ROOT.TLorentzVector()
+                l1p4.SetPtEtaPhiM(tree.Lepton_pt[lpindex1],tree.Lepton_eta[lpindex1],tree.Lepton_phi[lpindex1],0)
+                l2p4=ROOT.TLorentzVector()
+                l2p4.SetPtEtaPhiM(tree.Lepton_pt[lpindex2],tree.Lepton_eta[lpindex2],tree.Lepton_phi[lpindex2],0)
+
+                #print('I have 2 leptons again')
+
+                emup4 = l1p4+l2p4
+                M_emu= emup4.M()
+                if M_emu < 12 :  
+                    print("Mass is {}, skipping.....".format(M_emu))
+                    continue
+                #print("Mass is in the right mass range")
+                ## fill JEC histograms
+                if updown != 'nominal':
+                    for ij in xrange(0,len(taggedJetsP4)):
+                        if ij>1 : break
+                        if iJEC > 0 :
+                            #fill JEC histograms
+                            histos['bjetenls_jec_'+str(iJEC)+ '_' + updown].Fill(ROOT.TMath.Log(taggedJetsP4[ij].E()),evWgt[0]/taggedJetsP4[ij].E())
+                        else :
+                            #fill JER histogram
+                            histos['bjetenls_jer_' + updown].Fill(ROOT.TMath.Log(taggedJetsP4[ij].E()),evWgt[0]/taggedJetsP4[ij].E())
+                else:
+                    #save P4 for b-tagged jet
+                    #use up to two leading b-tagged jets
+                    for ij in xrange(0,len(taggedJetsP4)):
+                        if ij>1 : break
+                        #fill other histograms (nominal and weight based)
+                        histos['bjetenls_nominal'].Fill(ROOT.TMath.Log(taggedJetsP4[ij].E()),evWgt[0]/taggedJetsP4[ij].E())
+                        histos['bjetenls_lep_up'].Fill(ROOT.TMath.Log(taggedJetsP4[ij].E()),evWgt[2]/taggedJetsP4[ij].E())
+                        histos['bjetenls_lep_down'].Fill(ROOT.TMath.Log(taggedJetsP4[ij].E()),evWgt[1]/taggedJetsP4[ij].E())
+                        histos['bjetenls_PU_up'].Fill(ROOT.TMath.Log(taggedJetsP4[ij].E()),evWgt[4]/taggedJetsP4[ij].E())
+                        histos['bjetenls_PU_down'].Fill(ROOT.TMath.Log(taggedJetsP4[ij].E()),evWgt[3]/taggedJetsP4[ij].E())
+                        histos['bjetenls_toppT'].Fill(ROOT.TMath.Log(taggedJetsP4[ij].E()),evWgt[5]/taggedJetsP4[ij].E())
+                        histos['bjetenls_norm_up'].Fill(ROOT.TMath.Log(taggedJetsP4[ij].E()),(evWgt[0]*xsecWgt_up)/taggedJetsP4[ij].E())
+                        histos['bjetenls_norm_down'].Fill(ROOT.TMath.Log(taggedJetsP4[ij].E()),(evWgt[0]*xsecWgt_down)/taggedJetsP4[ij].E())
+                        #histos['bjetenls_nominal'].Fill(....)
 
 
     fIn.Close()

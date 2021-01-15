@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-import math, json, optparse, os, sys, pprint
-from ROOT import TMath, kFALSE, gStyle, kBlack, TF1, TH1F, TRandom3, TCanvas, TFile, kBlue
+import math, ROOT, json, optparse, os, sys, pprint
+from ROOT import *
 
 def myFitFunc(x=None,par=None):
-    return par[0]*TMath.Gaus(x[0], par[1], par[2], kFALSE)
+    return par[0]*TMath.Gaus(x[0],par[1],par[2],kFALSE)
 
-def gPeak(h=None, inDir=None, isData=None, lumi=None):
+def gPeak(h=None,inDir=None,isData=None,lumi=None,UncVar_=None):
 
     # Set the stats off 
     gStyle.SetOptStat(0)
@@ -31,14 +31,14 @@ def gPeak(h=None, inDir=None, isData=None, lumi=None):
     ## Set the function
     fitfunc = TF1("Gaussian fit", myFitFunc, minToFit, maxToFit, 3)
     ## Set normalization
-    fitfunc.SetParameter(0, h.Integral())
-    fitfunc.SetParLimits(0, 0.1*h.Integral(), 2.5*h.Integral())
+    fitfunc.SetParameter(0, h.Integral());
+    fitfunc.SetParLimits(0, 0.1*h.Integral(), 2.5*h.Integral());
     ## Set gaussian mean starting value and limits
-    fitfunc.SetParameter(1, 4.2)
-    fitfunc.SetParLimits(1, 4., 4.4)
+    fitfunc.SetParameter(1, 4.2);
+    fitfunc.SetParLimits(1, 4.0, 4.4);
     ## Set gaussian width starting value and limits
-    fitfunc.SetParameter(2, 0.65)
-    fitfunc.SetParLimits(2, 0.35, 0.95)
+    fitfunc.SetParameter(2, 0.65);
+    fitfunc.SetParLimits(2, 0.35, 0.95); 
     ## Some cosmetics
     fitfunc.SetLineColor(kBlue)
     fitfunc.SetLineWidth(3)
@@ -60,8 +60,6 @@ def gPeak(h=None, inDir=None, isData=None, lumi=None):
     # Calculate the uncalibrated Energy peak position and its uncertainty
     Ereco = math.exp(mean)
     Err = abs(Ereco*meanErr)
-
-    return Ereco, Err
 
     # Make a pull distribution    
     hPull = h.Clone("Pull")
@@ -156,127 +154,77 @@ def gPeak(h=None, inDir=None, isData=None, lumi=None):
     hPull.GetXaxis().SetRangeUser(minToFit,maxToFit)
     hPull.Draw("e")
 
-    # save and delete
-    sName = inDir + "/fit_"
+    #save and delete
+    sName = inDir+"/fit_";
     if isData is True:
-        sName = sName + "Data"
+        sName = sName+"Data";
     else: 
-        sName = sName + "MC"
-    c.SaveAs(sName + ".pdf")
-    c.SaveAs(sName + ".png")
+        sName = sName+"MC";
+    c.SaveAs(sName+"_"+UncVar_+".pdf");
+    c.SaveAs(sName+"_"+UncVar_+".png");
     del c
     fitfunc.IsA().Destructor(fitfunc)
-    del caption1, caption2
+    del caption1,caption2
 
     #all done here ;)
+
+    topMass = Ereco+math.sqrt(80.385**2-4.18**2+Ereco**2)
+    print topMass
     return Ereco,Err
 
 def main():
 
-    usage = 'usage: %prog [options]'
-    parser = optparse.OptionParser(usage)
-    parser.add_option('-d', '--isData',  action = 'store_true',   dest='isData')
-    parser.add_option('-i', '--inDir',   dest='inDir',   help='input directory',          default='nominal',    type='string')
-    parser.add_option('-j', '--json',    dest='json',    help='json with list of files',  default="../analyzeNplot/data/samples_Run2015_25ns.json", type='string')
-    parser.add_option('-l', '--lumi',    dest='lumi' ,   help='lumi to print out',        default=2444.,        type=float)
-    (opt, args) = parser.parse_args()
-    
-    # Read list of MC samples
-    if opt.isData is not True:
-        samplesList = []
-        jsonFile = open(opt.json,'r')
-        jsonList=json.load(jsonFile,encoding='utf-8').items()
-        jsonFile.close()
-        for tag,sample in jsonList: 
-            if not sample[3] in samplesList and not "Data" in sample[3]:
-                samplesList.append(sample[3])
+           usage = 'usage: %prog [options]'
+           parser = optparse.OptionParser(usage)
+           parser.add_option('-d', '--isData',  action = 'store_true',   dest='isData')
+           parser.add_option('-i', '--inDir',   dest='inDir',   help='input directory',          default='nominal',    type='string')
+           parser.add_option('-j', '--json',    dest='json',    help='json with list of files',  default="../analyzeNplot/data/samples_Run2015_25ns.json", type='string')
+           parser.add_option('-l', '--lumi',    dest='lumi' ,   help='lumi to print out',        default=2444.,        type=float)
+	   parser.add_option('-u', '--UncVar',   dest='UncVar',   help='Uncertainty Variation & Number',          default='jer_up',    type='string')
+           (opt, args) = parser.parse_args()
+           
+           # Read list of MC samples
+           if opt.isData is not True:
+               samplesList=[]
+               jsonFile = open(opt.json,'r')
+               jsonList=json.load(jsonFile,encoding='utf-8').items()
+               jsonFile.close()
+               for tag,sample in jsonList: 
+                   if not sample[3] in samplesList and not "Data" in sample[3]:
+                       samplesList.append(sample[3])
 
-    # Open the root file
-    fiName = "../analyzeNplot/"+opt.inDir+"/plots/plotter.root"
-    print("... processing", fiName)
-    if not os.path.isfile(fiName):
-        print("Help, file doesn't exist")
-        exit(-1)
-    res = TFile(fiName, "read")
+           # Open the root file
+           fiName = "../analyzeNplot/"+opt.inDir+"/plotter.root"
+           print "... processing", fiName
+           if not os.path.isfile(fiName):
+               print "Help, file doesn't exist"
+               exit(-1)
+           res = ROOT.TFile(fiName, "read")
 
-    # Get the histogram 
-    hName = "bjetenls/"   
-    if opt.isData is True:
-        hName = hName + "bjetenls"
-    else:
-        hName = hName + "bjetenls_" + samplesList[0]
-    histo = res.Get(str(hName))
-    histo.SetDirectory(0)
-    if opt.isData is not True:
-        for sampleInfo in samplesList:
-            if sampleInfo is not samplesList[0]: 
-                histo.Add(res.Get(str("bjetenls/bjetenls_"+sampleInfo)).Clone())
 
-    # Create the output directory
-    if not os.path.isdir(opt.inDir):
-        os.mkdir(opt.inDir)
+           #Get the histogram 
+           hName = "bjetenls_" + opt.UncVar + "/bjetenls_" + opt.UncVar
+	   histo = res.Get(str(hName))
+           histo.SetDirectory(0)
+           if opt.isData is not True:
+               for sampleInfo in samplesList:
+                   if sampleInfo is not samplesList[0]: 
+                       histo.Add(res.Get(str("bjetenls_" + opt.UncVar + "/bjetenls_" + opt.UncVar)).Clone());
 
-    # Pseudo experiment implementation
-    random3 = TRandom3()
-    random3.SetSeed(1)
+           # Create the output directory
+           if not os.path.isdir(opt.inDir):
+               os.makedirs(opt.inDir)
 
-    if opt.inDir == 'nominal':
-        histoEb = TH1F("histoEb", "nice", 100, 63, 71)
-        histoDEb = TH1F("histoDEb", "indeed", 100, 0, 0.5)
-        Eb_predicted = 67.57
-    if opt.inDir == 'light':
-        histoEb = TH1F("histoEb", "nice", 100, 50, 100)
-        histoDEb = TH1F("histoDEb", "indeed", 100, 0, 0.5)
-        Eb_predicted = 65.74
-    if opt.inDir == 'heavy':
-        histoEb = TH1F("histoEb", "nice", 100, 50, 100)
-        histoDEb = TH1F("histoDEb", "indeed", 100, 0, 0.5)
-        Eb_predicted = 69.39
+           # Calculate the energy peak position in the big MC sample
+           Eb,DEb = gPeak(h=histo,inDir=opt.inDir,isData=opt.isData,lumi=opt.lumi,UncVar_=opt.UncVar)
+           print "EbPeak( %s ) -> <E_{b}> = (%3.2f #pm %3.2f) GeV" % (opt.UncVar,Eb,DEb)
 
-    histoPull = TH1F("histoPull", "very nice", 100, -100, 100)
-
-    n = 1000
-
-    for _ in range(n):
-        histogram = histo.Clone()
-        for ibin in range(histo.GetNbinsX()):
-
-            x = histo.GetXaxis().GetBinCenter(ibin)
-            y = histo.GetBinContent(ibin)
-            
-            fluctuation = random3.PoissonD(y*math.exp(x)) / math.exp(x)
-            histogram.SetBinContent(ibin, fluctuation)
-            error = math.sqrt(fluctuation) / math.exp(x)
-            histogram.SetBinError(ibin, error)
-
-        # Calculate the energy peak position in the big MC sample
-        Eb, DEb = gPeak(h=histogram, inDir=opt.inDir, isData=opt.isData, lumi=opt.lumi)
-        print("<E_b> = (%3.2f #pm %3.2f) GeV" % (Eb, DEb))
-
-        histoEb.Fill(Eb)
-        histoDEb.Fill(DEb)
-
-        pull = (Eb - Eb_predicted) / DEb
-        histoPull.Fill(pull)
-    
-    gStyle.SetOptStat(1101)
-    
-    c = TCanvas("c", "")
-    histoEb.Fit("gaus")
-    histoEb.Draw()
-    c.SaveAs(opt.inDir + "/histoEb.pdf")
-
-    histoDEb.Fit("gaus")
-    histoDEb.Draw()
-    c.SaveAs(opt.inDir + "/histoDEb.pdf") 
-    
-    histoPull.Fit("gaus")
-    histoPull.Draw()
-    c.SaveAs(opt.inDir + "/histoPull.pdf") 
-
-    c.Close() 
-
-    res.Close()
+	   file1 = open("UncVar.txt","a")
+	   L = "bjetenls_" + opt.UncVar + "      " + "<E_{b}> = (" + str(Eb) + " #pm " + str(DEb) + ") GeV \n"
+	   file1.writelines(L)
+	    
+           file1.close()
+           res.Close()
                
 if __name__ == "__main__":
     sys.exit(main())
